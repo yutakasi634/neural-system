@@ -1,5 +1,5 @@
-
 //The soft for simulating neural system.
+#include <fstream>
 #include <iostream>
 #include <cmath>
 #include <stdio.h>
@@ -21,12 +21,16 @@ public:
   Neurons(){
       potential = 2.0*(rand() % 1000);
   }
-  double getpotential(int i) const{return potential[i]};
+  double getpotential() const{return potential[]};
+  double getpotential(int i) const{return potential[i]}
   double setpotential(int i,double x) {potential[i] = x};
 };
 
-double differentialEquation(double input,double potential){
-  double dpdt = 1/(1+exp(input)) - potential;
+double differentialEquation(double potential[],int cellnumber){
+  double otherCellSum = -1*(potential[cellnumber]);
+  for(int i = 0;i < numneuron;i++)
+    otherCellSum += potential[i];
+  double dpdt = 1/(1+exp(potential[otherCellSum]))-potential[cellnumber];    
   return dpdt;
 }
 
@@ -39,23 +43,40 @@ int theta(double x){
   return result;
 }
 
-int timeevolution(Neurons neurons){/*class is avalable for argument.*/
+void timeevolution(Neurons& neuron){/*class is avalable for argument.*/
   double k1[numneuron],k2[numneuron],k3[numneuron],k4[numneuron];
-  double sum = 0.0;
-  for(int i = 0;i < numneuron;i++)
-    sum += neurons.getpotential[i];
+  double temporaryPotential[numneuron];
   for(int i = 0;i < numneuron;i++){
-    double input = sum - neuron.getpotential[i];
-    k1[i] = differentialEquation(input,neuron.getpotential[i]);
+    k1[i] = differentialEquation(Neurons.getpotential(),i);
+    temporaryPotential[i] = Neurons.getpotential(i) + (1/2)*dt*k1[i];
   }
+  for(int i = 0;i < numneuron;i++){
+    k2[i] = differentialEquation(temporaryPotential[],i);
+    temporaryPotential[i] = Neurons.getpotential(i) + (1/2)*dt*k2[i];
+  }
+  for(int i = 0;i < numneuron;i++){
+    k3[i] = differentialEquation(temporaryPotential[],i);
+    temporaryPotential[i] = Neurons.getpotential(i) + dt*k3[i];
+  }
+  for(int i = 0;i < numneuron;i++){
+    k4[i] = differentialEquation(temporaryPotential[],i);
+    setpotential(i,getpotential(i) + (k1[i]+2*k2[i]+2*k3[i]+k4[i])/6);
+  }
+}
 
-  kneu0[0] = transinput(output(neuron.getpotential()))+damp(neuron0.getpotential);
-  kneu1[0] = transinput(output(neuron.getpotential()))+damp(neuron1.getpotential);
-  kneu0[1] = transinput(output(neuron.getpotential()+kneu0[0]*(dt/2)))+damp(neuron.getpotential()+kneu0[0]*(dt/2));
-  kneu1[1] = transinput(output(neuron.getpotential()+kneu1[0]*(dt/2)))+damp(neuron.getpotential()+kneu1[0]*(dt/2));
-  kneu0[2] = transinput(output(neuron.getpotential()+kneu0[1]*(dt/2)))+damp(neuron.getpotential()+kneu0[1]*(dt/2));
-  kneu1[2] = transinput(output(neuron.getpotential()+kneu1[1]*(dt/2)))+damp(neuron.getpotential()+kneu1[1]*(dt/2));
-  kneu0[3] = transinput(output(neuron.getpotential()+kneu0[2]*dt))+damp(neuron.getpotential()+kneu0[2]*dt);
-  kneu1[3] = transinput(output(neuron.getpotential()+kneu1[2]*dt))+damp(neuron.getpotential()+kneu1[2]*dt);
+void dataOutPut(Neurons neuron){
+  for(i = 0;i < numneuron;i++)
+    test0.dat << getpotential(i) << " ";
+  test0.dat << "\n"
+}
+
+int main{
+  ofstream fout("test0.dat")
+  Neurons neuron;
+  dataOutPut(neuron)
+  for(i = 0;i*dt < 100;i++){
+    timeevolution(neuron);
+    dataOutPut(neuron)
+  }
   return 0;
 }
