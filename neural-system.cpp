@@ -7,7 +7,7 @@
 using namespace std;
 
 const double dt = 0.0001;
-const int numneuron = 2;
+const int numneuron = 50;
 
 /*
 d(potential)/dt = transinput(input)+damp()
@@ -23,12 +23,14 @@ public:
     for(int i = 0;i < numneuron;i++)
       potential[i] = 2.0*(rand() % 1000)/1000;
   }
-  double const *getpotential() const{return &(potential[0]);}
+  double const *getpotential() const {return &(potential[0]);}
   double getpotential(int i) const{return potential[i];}
   double setpotential(int i,double x) {return potential[i] = x;}
 };
 
-double differentialEquation(double const potential[],int cellnumber){
+double differentialEquation(double const potential[],int cellnumber);
+
+{
   double otherCellSum = -1*(potential[cellnumber]);
   for(int i = 0;i < numneuron;i++)
     otherCellSum += potential[i];
@@ -66,19 +68,29 @@ void timeevolution(Neurons& neuron){/*class is avalable for argument.*/
   }
 }
 
+template<typename charT, typename traits>
+std::basic_ostream<charT, traits>&
+operator<<(std::basic_ostream<charT, traits>& os, const Neurons& n)
+{
+  for(std::size_t i=0; i<n.size(); ++i)
+    os << n.getpotential(i) << " ";
+  return os;
+}
+
 /*void dataOutPut(Neurons& neuron){
   for(int i = 0;i < numneuron;i++)
     fout << neuron.getpotential(i) << " ";
   fout << "\n";
   }*/
 
-int main(){
+int main(int argc, char **argv){
   Neurons neuron;
   ofstream fout("test0.dat");
   fout << 0.0 << " ";
-  for(int i = 0;i < numneuron;i++)
-    fout << neuron.getpotential(i) << " ";
-  fout << "\n";
+  fout << neuron << std::endl;
+  //  for(int i = 0;i < numneuron;i++)
+  //  fout << neuron.getpotential(i) << " ";
+  // fout << "\n";
   for(int i = 0;i*dt < 10;i++){
     timeevolution(neuron);
     fout << dt*i << " ";
