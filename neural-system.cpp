@@ -6,7 +6,7 @@
 
 using namespace std;
 
-const double dt = 0.001;
+const double dt = 0.0001;
 const int numneuron = 2;
 
 /*
@@ -62,7 +62,7 @@ void timeevolution(Neurons& neuron){/*class is avalable for argument.*/
   }
   for(int i = 0;i < numneuron;i++){
     k4[i] = differentialEquation(temporaryPotential,i);
-    neuron.setpotential(i,neuron.getpotential(i) + (k1[i]+2*k2[i]+2*k3[i]+k4[i])/6);
+    neuron.setpotential(i,neuron.getpotential(i) + dt*(k1[i]+2*k2[i]+2*k3[i]+k4[i])/6);
   }
 }
 
@@ -79,7 +79,7 @@ int main(){
   for(int i = 0;i < numneuron;i++)
     fout << neuron.getpotential(i) << " ";
   fout << "\n";
-  for(int i = 0;i*dt < 100;i++){
+  for(int i = 0;i*dt < 10;i++){
     timeevolution(neuron);
     fout << dt*i << " ";
     for(int j = 0;j < numneuron;j++)
