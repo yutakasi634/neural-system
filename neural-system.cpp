@@ -3,6 +3,7 @@
 #include <iostream>
 #include <cmath>
 #include <stdlib.h>
+#include <vector>
 
 using namespace std;
 
@@ -28,9 +29,7 @@ public:
   double setpotential(int i,double x) {return potential[i] = x;}
 };
 
-double differentialEquation(double const potential[],int cellnumber);
-
-{
+double differentialEquation(double const potential[],int cellnumber){
   double otherCellSum = -1*(potential[cellnumber]);
   for(int i = 0;i < numneuron;i++)
     otherCellSum += potential[i];
@@ -68,11 +67,11 @@ void timeevolution(Neurons& neuron){/*class is avalable for argument.*/
   }
 }
 
-template<typename charT, typename traits>
+template<typename charT, typename traits> //typenameもclassも実用上相違はない
 std::basic_ostream<charT, traits>&
 operator<<(std::basic_ostream<charT, traits>& os, const Neurons& n)
 {
-  for(std::size_t i=0; i<n.size(); ++i)
+  for(std::size_t i=0; i<n.size(); ++i)//size関数を定義する必要がある
     os << n.getpotential(i) << " ";
   return os;
 }
@@ -85,7 +84,7 @@ operator<<(std::basic_ostream<charT, traits>& os, const Neurons& n)
 
 int main(int argc, char **argv){
   Neurons neuron;
-  ofstream fout("test0.dat");
+  std::ofstream fout("test0.dat");
   fout << 0.0 << " ";
   fout << neuron << std::endl;
   //  for(int i = 0;i < numneuron;i++)
