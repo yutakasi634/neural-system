@@ -1,0 +1,4 @@
+unset key
+plot for [i=2:25] "test.dat" using 1:i w lp
+
+pause -1
