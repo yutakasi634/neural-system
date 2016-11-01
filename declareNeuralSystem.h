@@ -22,9 +22,10 @@ public:
 
 template<typename T>//主にvectorが入る
 double differentialEquation(const std::vector<T>& potential,int cellnumber){
-  double otherCellSum = -1*(potential[cellnumber]);
-  for(int i = 0;i < potential.size();i++)
-    otherCellSum += potential[i];
+  T otherCellSum = -1*(potential[cellnumber]);
+  for(typename std::vector<T>::const_iterator i = potential.begin();i != potential.end(); ++i)//typenameをつけないとstd::vector<T>::iteratorが型と認識されない
+    //const std::vector<T>のiteratorはconst_iteratorになる
+    otherCellSum += *i;
   double dpdt = 1/(1+exp(otherCellSum))-potential[cellnumber];    
   return dpdt;
 }
