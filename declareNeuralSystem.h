@@ -1,13 +1,11 @@
 //defineForNeuralSystem.h
-#ifndef neural1
-#define neural1
+#ifndef NEURAL1
+#define NEURAL1
 #include <fstream>
 #include <iostream>
 #include <cmath>
 #include <stdlib.h>
 #include <vector>
-
-const double dt = 0.0001;
 
 class Neurons{
 private:
@@ -41,6 +39,6 @@ operator<<(std::basic_ostream<charT, traits>& os, const Neurons& n)
 
 int theta(double x);
 
-void timeevolution(Neurons& neuron);
+void timeevolution(Neurons& neuron,double dt);
 
 #endif

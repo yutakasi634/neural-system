@@ -29,7 +29,7 @@ int theta(double x){
   return result;
 }
 
-void timeevolution(Neurons& neuron){/*class is avalable for argument.*/
+void timeevolution(Neurons& neuron,double dt){/*class is avalable for argument.*/
   std::vector<double> k1(neuron.getneuronnum()),k2(neuron.getneuronnum()),k3(neuron.getneuronnum()),k4(neuron.getneuronnum());
   std::vector<double> temporaryPotential(neuron.getneuronnum());
   for(uint i = 0;i < neuron.getneuronnum();i++){
