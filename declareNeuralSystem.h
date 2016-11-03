@@ -37,8 +37,8 @@ operator<<(std::basic_ostream<charT, traits>& os, const Neurons& n)
   return os;
 }
 
-int theta(double x);
-
 void timeevolution(Neurons& neuron,double dt);
+
+int theta(double x);
 
 #endif

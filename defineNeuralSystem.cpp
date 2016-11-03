@@ -20,15 +20,6 @@ const std::vector<double>& Neurons::getpotential() const{
    return potential;
 }
 
-int theta(double x){
-  int result;
-  if(x >= 0)
-    result = 1;
-  else
-    result = 0;
-  return result;
-}
-
 void timeevolution(Neurons& neuron,double dt){/*class is avalable for argument.*/
   std::vector<double> k1(neuron.getneuronnum()),k2(neuron.getneuronnum()),k3(neuron.getneuronnum()),k4(neuron.getneuronnum());
   std::vector<double> temporaryPotential(neuron.getneuronnum());
@@ -48,4 +39,13 @@ void timeevolution(Neurons& neuron,double dt){/*class is avalable for argument.*
     k4[i] = differentialEquation(temporaryPotential,i);
     neuron.setpotential(i,(neuron.getpotential())[i] + dt*(k1[i]+2*k2[i]+2*k3[i]+k4[i])/6);
   }
+}
+
+int theta(double x){
+  int result;
+  if(x >= 0)
+    result = 1;
+  else
+    result = 0;
+  return result;
 }
