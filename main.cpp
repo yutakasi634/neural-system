@@ -6,18 +6,18 @@
 #include <vector>
 #include "declareNeuralSystem.h"
 
-int main(int argc, char **argv){
-  Neurons neuron(50);
-  double dt = 0.0001;
+int main(){
+  NeuronTypeA<double> neuronA;
+  double dt = 0.0001;//タイムステップ
+  double totaltime = 1000.0;//総シミュレーション時間
   std::ofstream fout("test0.dat");
   fout << 0.0 << " ";
-  fout << neuron << std::endl;
-  for(int i = 0;i*dt < 10;i++){
-    timeevolution(neuron,0.0001);
+  fout << neuronA << std::endl;
+  for(int i = 0;i*dt < totaltime;i++){
+    fourthOrderRungeKutta(neuronA,dt);
     if(i%100 == 0){
       fout << dt*i << " ";
-      for(uint j = 0;j < neuron.getneuronnum();j++)
-	fout << (neuron.getpotential())[j] << " ";
+      fout << neuronA;
       fout << "\n";
     }
   }
