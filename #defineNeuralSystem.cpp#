@@ -1,8 +1,0 @@
-//defineNeuralSystem.cpp
-#include <fstream>
-#include <iostream>
-#include <cmath>
-#include <stdlib.h>
-#include <vector>
-#include "declareNeuralSystem.h"
-
