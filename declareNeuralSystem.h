@@ -53,9 +53,29 @@ std::vector<T> NeuronTypeA<T>::differentialEquation() const{
   dpdt[0] = 10*(this->potential[1] - this->potential[0]);
   dpdt[1] = 28*this->potential[0] - this->potential[1] - this->potential[0]*this->potential[2];
   dpdt[2] = this->potential[0]*this->potential[1] - (8.0/3.0)*this->potential[2];
- return dpdt;
+  return dpdt;
 }
-//名前検索の関係でNeuronを明示しないといけない、らしい？？？
+//名前検索の関係でNeuronを明示しないといけない、らしい？？？ this->の方が直感的なので良いかも
+
+template<typename T>
+class NeuronTypeB : public Neuron<T>{
+ public:
+  NeuronTypeB();
+  std::vector<T> differentialEquation(const int) const override;
+};
+
+template<typename T>
+NeuronTypeB<T>::NeuronTypeB() : Neuron<T>(3) {}
+
+template<typename T>
+std::vector<T> NeuronTypeB<T>::differentialEquation(const int othercellpot) const{
+  std::vector<T> dpdt;
+  dpdt.resize(Neuron<T>::potential.size());
+  dpdt[0] = 10*(this->potential[1] - this->potential[0]);
+  dpdt[1] = 28*othercellpot - this->potential[1] - othercellpot*this->potential[2];
+  dpdt[2] = othercellpot*this->potential[1] - (8.0/3.0)*this->potential[2];
+  return dpdt;
+}
 
 template<typename T>
 void fourthOrderRungeKutta(Neuron<T>& neuron,double dt){/*class is avalable for argument.*/
