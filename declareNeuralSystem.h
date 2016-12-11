@@ -47,7 +47,7 @@ template<typename T>
 NeuronTypeA<T>::NeuronTypeA() : Neuron<T>(3) {}
 
 template<typename T>
-std::vector<T> NeuronTypeA<T>::differentialEquation() const{
+std::vector<T> NeuronTypeA<T>::differentialEquation(const T& othercellpot) const{
   std::vector<T> dpdt;
   dpdt.resize(Neuron<T>::potential.size());
   dpdt[0] = 10*(this->potential[1] - this->potential[0]);
@@ -61,14 +61,14 @@ template<typename T>
 class NeuronTypeB : public Neuron<T>{
  public:
   NeuronTypeB();
-  std::vector<T> differentialEquation(const int) const override;
+  std::vector<T> differentialEquation(const T) const override;
 };
 
 template<typename T>
 NeuronTypeB<T>::NeuronTypeB() : Neuron<T>(3) {}
 
 template<typename T>
-std::vector<T> NeuronTypeB<T>::differentialEquation(const int othercellpot) const{
+std::vector<T> NeuronTypeB<T>::differentialEquation(const T& othercellpot) const{
   std::vector<T> dpdt;
   dpdt.resize(Neuron<T>::potential.size());
   dpdt[0] = 10*(this->potential[1] - this->potential[0]);
@@ -79,19 +79,44 @@ std::vector<T> NeuronTypeB<T>::differentialEquation(const int othercellpot) cons
 
 template<typename T>
 void fourthOrderRungeKutta(NeuralNetwork& Network,double dt){/*class is avalable for argument.*/
-  std::vector<vector<T>> k1,k2,k3,k4;
-  std::vector<vector<T>> originalPotential;
-  for(uint i = 0; i < (Network.getNeurons()).size(); ++i)
+  std::vector<std::vector<T>> k1,k2,k3,k4;
+  std::vector<std::vector<T>> originalPotential;
+  uint NeuronsSize = (Network.getpotential()).size();
+
+  for(uint i = 0; i < NeuronSize; ++i)
     originalPotential[i] = (Network.getNeurons())[i];
 
-  k1 = neuron.differentialEquation();
-  neuron.setpotential(originalPotential + (1.0/2.0)*dt*k1);
-  k2 = neuron.differentialEquation();
-  neuron.setpotential(originalPotential + (1.0/2.0)*dt*k2);
-  k3 = neuron.differentialEquation();
-  neuron.setpotential(originalPotential + dt*k3);
-  k4 = neuron.differentialEquation();
-  neuron.setpotential(originalPotential + dt*(k1+2.0*k2+2.0*k3+k4)/6.0);
+  for(uint i = 0; i < NeuronSize; ++i){
+    T othercellpot = 0;
+    for(uint j = 0; j < NeuronSize; ++j)
+      othercellpot += (Network.getNeurons())[j][0]*(Network.getConnection())[i][j];
+    k1[i] = (Network.getNeurons())[i].differentialEquation(othercellpot);
+    (Network.getNeurons())[i].setpotential(originalPotential[i] + (1.0/2.0)*dt*k1[i]);
+  }
+
+    for(uint i = 0; i < NeuronSize; ++i){
+    T othercellpot = 0;
+    for(uint j = 0; j < NeuronSize; ++j)
+      othercellpot += (Network.getNeurons())[j][0]*(Network.getConnection())[i][j];
+    k2[i] = (Network.getNeurons())[i].differentialEquation(othercellpot);
+    (Network.getNeurons())[i].setpotential(originalPotential[i] + (1.0/2.0)*dt*k2[i]);
+  }
+    
+    for(uint i = 0; i < NeuronSize; ++i){
+    T othercellpot = 0;
+    for(uint j = 0; j < NeuronSize; ++j)
+      othercellpot += (Network.getNeurons())[j][0]*(Network.getConnection())[i][j];
+    k3[i] = (Network.getNeurons())[i].differentialEquation(othercellpot);
+    (Network.getNeurons())[i].setpotential(originalPotential[i] + dt*k3[i]);
+  }
+
+    for(uint i = 0; i < NeuronSize; ++i){
+    T othercellpot = 0;
+    for(uint j = 0; j < NeuronSize; ++j)
+      othercellpot += (Network.getNeurons())[j][0]*(Network.getConnection())[i][j];
+    k4[i] = (Network.getNeurons())[i].differentialEquation(othercellpot);
+    (Network.getNeurons())[i].setpotential(originalPotential[i] + dt*(k1[i]+2.0*k2[i]+2.0*k3[i]+k4[i])/6.0);
+  }
 }
 
 template<typename T>
@@ -113,6 +138,5 @@ operator<<(std::basic_ostream<charT, traits>& os, const Neuron<T>& n)
     os << (n.getpotential())[i] << " ";
   return os;
 }
-
 
 #endif
