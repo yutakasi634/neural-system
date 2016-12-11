@@ -78,9 +78,12 @@ std::vector<T> NeuronTypeB<T>::differentialEquation(const int othercellpot) cons
 }
 
 template<typename T>
-void fourthOrderRungeKutta(Neuron<T>& neuron,double dt){/*class is avalable for argument.*/
-  std::vector<T> k1,k2,k3,k4;
-  std::vector<T> originalPotential = neuron.getpotential();
+void fourthOrderRungeKutta(NeuralNetwork& Network,double dt){/*class is avalable for argument.*/
+  std::vector<vector<T>> k1,k2,k3,k4;
+  std::vector<vector<T>> originalPotential;
+  for(uint i = 0; i < (Network.getNeurons()).size(); ++i)
+    originalPotential[i] = (Network.getNeurons())[i];
+
   k1 = neuron.differentialEquation();
   neuron.setpotential(originalPotential + (1.0/2.0)*dt*k1);
   k2 = neuron.differentialEquation();
