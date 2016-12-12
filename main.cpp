@@ -2,10 +2,7 @@
 #include <fstream>
 #include <iostream>
 #include <cmath>
-#include <stdlib.h>
-#include <vector>
-#include <array>
-#include "declareNeuralSystem.h"
+#include "declareNeuralNetwork.h"
 
 int main(){
   int NumOfNeuronA = 1;//NeuronAの数
