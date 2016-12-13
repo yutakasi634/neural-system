@@ -17,17 +17,17 @@ public:
   Neuron(uint num);
   const std::vector<T>& getpotential() const;
   void setpotential(std::vector<T> x) {potential = x;}
-  virtual std::vector<T> differentialEquation() const = 0;
+  virtual std::vector<T> differentialEquation(const T&) const = 0;
 };
 
 template<typename T>
 Neuron<T>::Neuron(uint num){
   std::mt19937 mt(0);
-  std::uniform_real_distribution<T> rand2(0,2);
+  std::uniform_real_distribution<T> rand10(0,10);
   potential.reserve(num);
-  potential.push_back(0.0);
-  potential.push_back(1.0); 
-  potential.push_back(0.0); 
+  potential.push_back(rand10(mt));
+  potential.push_back(rand10(mt)); 
+  potential.push_back(rand10(mt)); 
 }
 
 template<typename T>
@@ -83,7 +83,7 @@ std::basic_ostream<charT, traits>&
 operator<<(std::basic_ostream<charT, traits>& os, const Neuron<T>& n)
 {
   for(std::size_t i=0; i < (n.getpotential()).size(); ++i)
-    os << (n.getpotential())[i] << " ";
+    os << (n.getpotential()).at(i) << " ";
   return os;
 }
 
