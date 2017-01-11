@@ -1,43 +1,28 @@
-#ifndef VECTOR1
-#define VECTOR1
+#ifndef operatorForVector
+#define operatorForVector
 #include <iostream>
 #include <vector>
+#include <stdexcept>
 
 //vectorに対する四則演算のオーバーロード
 
 //+
 template<typename T>
 std::vector<T> operator+(const std::vector<T>& self,const std::vector<T>& other){
-  try{
-    if(self.size() != other.size())
-      throw "You input different size vector.";
-  }
-  catch(char* err){
-    std::cout << "error:" << err << "\n";
-    std::vector<T> re;
-    return re;
-  }
-  
-  std::vector<T> result;
-  result.resize(self.size());
+  if(self.size() != other.size())
+    throw std::invalid_argument("You put different size vector.");  
+  std::vector<T> result(self.size());
   for(std::size_t i = 0; i < self.size(); ++i)
     result[i] = self[i] + other[i];
   return result;
 }
-
+/*以下同様に修正*/
 
 //-
 template<typename T>
 std::vector<T> operator-(const std::vector<T>& self,const std::vector<T>& other){
-  try{
-    if(self.size() != other.size())
-      throw "You input different size vector.";
-  }
-  catch(char* err){
-    std::cout << "error:" << err << "\n";
-    return 1;
-  }
-  
+  if(self.size() != other.size())
+    throw std::invalid_argument("You put different size vector.");
   std::vector<T> result;
   result.resize(self.size());
   for(std::size_t i = 0; i < self.size(); ++i)
@@ -49,15 +34,8 @@ std::vector<T> operator-(const std::vector<T>& self,const std::vector<T>& other)
 //vector * vector
 template<typename T>
 std::vector<T> operator*(const std::vector<T>& self,const std::vector<T>& other){
-  try{
-    if(self.size() != other.size())
-      throw "You input different size vector.";
-  }
-  catch(char* err){
-    std::cout << "error:" << err << "\n";
-    return 1;
-  }
-  
+  if(self.size() != other.size())
+    throw std::invalid_argument("You put different size vector.");  
   std::vector<T> result;
   result.resize(self.size());
   for(std::size_t i = 0; i < self.size(); ++i)
@@ -89,15 +67,8 @@ std::vector<T> operator*(const std::vector<T>& self,const T& other){
 // vector / vector
 template<typename T>
 std::vector<T> operator/(const std::vector<T>& self,const std::vector<T>& other){
-  try{
-    if(self.size() != other.size())
-      throw "You input different size vector.";
-  }
-  catch(char* err){
-    std::cout << "error:" << err << "\n";
-    return 1;
-  }
-  
+  if(self.size() != other.size())
+    throw std::invalid_argument("You put different size vector.");    
   std::vector<T> result;
   result.resize(self.size());
   for(std::size_t i = 0; i < self.size(); ++i)
